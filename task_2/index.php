@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 const OPERATION_EXIT = 0;
 const OPERATION_ADD = 1;
@@ -14,19 +15,31 @@ $operations = [
 
 $items = [];
 
+function printShoppingList($items)
+{
+
+    if (count($items)) {
+        echo 'Ваш список покупок: ' . PHP_EOL;
+        echo implode("\n", $items) . "\n";
+    } else {
+        echo 'Ваш список покупок пуст.' . PHP_EOL;
+    }
+
+}
+
 
 do {
     system('clear');
 //    system('cls'); // windows
 
     do {
-        if (count($items)) {
-            echo 'Ваш список покупок: ' . PHP_EOL;
-            echo implode("\n", $items) . "\n";
-        } else {
-            echo 'Ваш список покупок пуст.' . PHP_EOL;
-        }
-
+        // if (count($items)) {
+        //     echo 'Ваш список покупок: ' . PHP_EOL;
+        //     echo implode("\n", $items) . "\n";
+        // } else {
+        //     echo 'Ваш список покупок пуст.' . PHP_EOL;
+        // }
+        printShoppingList($items);
 
         echo 'Выберите операцию для выполнения: ' . PHP_EOL;
         // Проверить, есть ли товары в списке? Если нет, то не отображать пункт про удаление товаров
