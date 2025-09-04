@@ -15,16 +15,57 @@ $operations = [
 
 $items = [];
 
-function printShoppingList($items)
-{
 
+function printShoppingList(array $items): void
+{
     if (count($items)) {
         echo 'Ваш список покупок: ' . PHP_EOL;
         echo implode("\n", $items) . "\n";
     } else {
         echo 'Ваш список покупок пуст.' . PHP_EOL;
     }
+}
 
+
+function inputSectionMenu(array $operations): string
+{
+    echo 'Выберите операцию для выполнения: ' . PHP_EOL;
+    // Проверить, есть ли товары в списке? Если нет, то не отображать пункт про удаление товаров
+    echo implode(PHP_EOL, $operations) . PHP_EOL . '> ';
+    $operationNumber = trim(fgets(STDIN));
+
+    return $operationNumber;
+}
+
+
+function checkMenuItem(string $operationNumber, array $operations): bool
+{
+     if (!array_key_exists($operationNumber, $operations)) {
+            system('clear');
+
+            echo '!!! Неизвестный номер операции, повторите попытку.' . PHP_EOL;
+
+            return false;
+        }
+
+        return true;
+}
+
+
+function printStartMenu(array $items, array $operations)
+{
+    printShoppingList($items);
+
+    $operationNumber = inputSectionMenu($operations);
+
+    $checkItem = checkMenuItem($operationNumber, $operations);
+
+    if (!$checkItem) {
+
+        printStartMenu($items, $operations);
+    }
+
+    return $operationNumber;
 }
 
 
@@ -32,27 +73,29 @@ do {
     system('clear');
 //    system('cls'); // windows
 
-    do {
-        // if (count($items)) {
-        //     echo 'Ваш список покупок: ' . PHP_EOL;
-        //     echo implode("\n", $items) . "\n";
-        // } else {
-        //     echo 'Ваш список покупок пуст.' . PHP_EOL;
-        // }
-        printShoppingList($items);
+    $operationNumber = printStartMenu($items, $operations);
 
-        echo 'Выберите операцию для выполнения: ' . PHP_EOL;
-        // Проверить, есть ли товары в списке? Если нет, то не отображать пункт про удаление товаров
-        echo implode(PHP_EOL, $operations) . PHP_EOL . '> ';
-        $operationNumber = trim(fgets(STDIN));
+    // do {
+    //     if (count($items)) {
+    //         echo 'Ваш список покупок: ' . PHP_EOL;
+    //         echo implode("\n", $items) . "\n";
+    //     } else {
+    //         echo 'Ваш список покупок пуст.' . PHP_EOL;
+    //     }
 
-        if (!array_key_exists($operationNumber, $operations)) {
-            system('clear');
 
-            echo '!!! Неизвестный номер операции, повторите попытку.' . PHP_EOL;
-        }
+    //     echo 'Выберите операцию для выполнения: ' . PHP_EOL;
+    //     // Проверить, есть ли товары в списке? Если нет, то не отображать пункт про удаление товаров
+    //     echo implode(PHP_EOL, $operations) . PHP_EOL . '> ';
+    //     $operationNumber = trim(fgets(STDIN));
 
-    } while (!array_key_exists($operationNumber, $operations));
+    //     if (!array_key_exists($operationNumber, $operations)) {
+    //         system('clear');
+
+    //         echo '!!! Неизвестный номер операции, повторите попытку.' . PHP_EOL;
+    //     }
+
+    // } while (!array_key_exists($operationNumber, $operations));
 
     echo 'Выбрана операция: '  . $operations[$operationNumber] . PHP_EOL;
 
