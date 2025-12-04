@@ -16,6 +16,20 @@ $operations = [
 $items = [];
 
 
+function checkAndPrintOperations(array $operations, array $items)
+{
+
+    if (!count($items)) {
+        $menu = $operations;
+        unset($menu[OPERATION_DELETE]);
+
+        return $menu;
+    }
+
+    return $operations;
+}
+
+
 function printShoppingList(array $items): void
 {
     if (count($items)) {
@@ -27,11 +41,13 @@ function printShoppingList(array $items): void
 }
 
 
-function inputSectionMenu(array $operations): string
+function inputSectionMenu(array $operations, array $items): string
 {
     echo 'Выберите операцию для выполнения: ' . PHP_EOL;
     // Проверить, есть ли товары в списке? Если нет, то не отображать пункт про удаление товаров
-    echo implode(PHP_EOL, $operations) . PHP_EOL . '> ';
+    $menu = checkAndPrintOperations($operations, $items);
+
+    echo implode(PHP_EOL, $menu) . PHP_EOL . '> ';
     $operationNumber = trim(fgets(STDIN));
 
     return $operationNumber;
@@ -54,14 +70,16 @@ function checkMenuItem(string $operationNumber, array $operations): bool
 
 function printStartMenu(array $items, array $operations)
 {
+    // выводим спискок покупок
     printShoppingList($items);
 
-    $operationNumber = inputSectionMenu($operations);
+    // запрашиваем ввести номер операции (выбрать позицию из меню)
+    $operationNumber = inputSectionMenu($operations, $items);
 
+    // проверка - есть ли выбраное меню в списке
     $checkItem = checkMenuItem($operationNumber, $operations);
 
     if (!$checkItem) {
-
         printStartMenu($items, $operations);
     }
 
@@ -70,32 +88,12 @@ function printStartMenu(array $items, array $operations)
 
 
 do {
+
     system('clear');
 //    system('cls'); // windows
 
     $operationNumber = printStartMenu($items, $operations);
 
-    // do {
-    //     if (count($items)) {
-    //         echo 'Ваш список покупок: ' . PHP_EOL;
-    //         echo implode("\n", $items) . "\n";
-    //     } else {
-    //         echo 'Ваш список покупок пуст.' . PHP_EOL;
-    //     }
-
-
-    //     echo 'Выберите операцию для выполнения: ' . PHP_EOL;
-    //     // Проверить, есть ли товары в списке? Если нет, то не отображать пункт про удаление товаров
-    //     echo implode(PHP_EOL, $operations) . PHP_EOL . '> ';
-    //     $operationNumber = trim(fgets(STDIN));
-
-    //     if (!array_key_exists($operationNumber, $operations)) {
-    //         system('clear');
-
-    //         echo '!!! Неизвестный номер операции, повторите попытку.' . PHP_EOL;
-    //     }
-
-    // } while (!array_key_exists($operationNumber, $operations));
 
     echo 'Выбрана операция: '  . $operations[$operationNumber] . PHP_EOL;
 
